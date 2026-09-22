@@ -1,14 +1,18 @@
-import { fireEvent } from '@testing-library/dom';
-import '@testing-library/jest-dom';
+const { fireEvent } = require('@testing-library/dom');
+require('@testing-library/jest-dom');
 
 test('el botó mostra un alert amb "Hola, món!"', () => {
-  document.body.innerHTML = `<button id="btnSaluda">Saluda</button>`;
+  document.body.innerHTML = `
+    <button id="btnSaluda">Saluda</button>
+  `;
 
-  // Mock de window.alert per poder-lo verificar
+  // Mock de window.alert
   window.alert = jest.fn();
+
   window.saluda = jest.fn(() => alert('Hola, món!'));
 
   const button = document.getElementById('btnSaluda');
+
   button.addEventListener('click', window.saluda);
 
   fireEvent.click(button);
