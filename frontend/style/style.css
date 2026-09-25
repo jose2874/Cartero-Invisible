@@ -1,8 +1,19 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
+  text-align: justify;
   background-color: #f4f1ea;
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 20px;
+  padding-bottom: 60px;
+}
+
+#titolPrincipal {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 h1 {
@@ -14,5 +25,51 @@ section {
   margin: 20px 0;
   padding: 16px;
 }
-h1:hover { color: #e74c3c; }              /* canvia de color en passar-hi el ratolí */
-section:first-child { border-left: 4px solid #2c3e50; }
+
+h1:hover {
+  color: #01f64f;
+}
+
+section:first-child {
+  border-left: 4px solid #2c5045;
+}
+
+#btnSaluda {
+  display: block;
+  margin: 20px auto;
+}
+marquee {
+  background-color: #2c5045;
+  color: #fff;
+}
+
+button {
+  background-color: #2c5045;
+  color: #fff;
+  padding: 20px 30px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.carta {
+  border: 1px solid #ccc;
+  padding: 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background: linear-gradient(to top, lime, 20%, cyan);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+footer {
+  text-align: center;
+  background-color: #fff;
+  border-top: 1px solid #010502;
+  position: fixed;  
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}

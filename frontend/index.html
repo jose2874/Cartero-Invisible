@@ -1,27 +1,55 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>El Cartero Invisible</title>
   <link rel="stylesheet" href="./style/style.css">
-</head>
-<body>
-  <header>
-    <h1>El Cartero Invisible</h1>
-  </header>
-  <main>
-    <section id="llistatCartes">
-      <!-- de moment buit: aquí aniran les cartes -->
-    </section>
-    <section id="formulariCarta">
-      <!-- de moment buit: aquí anirà el formulari -->
-    </section>
-  </main>
-<footer>
-  <p>&copy; 2026 El Cartero Invisible</p>
-</footer>
-  <button id="btnSaluda">Saluda'm!</button>
   <script src="./js/script.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1 id="titolPrincipal">El Cartero Invisible</h1>
+  </header>
+
+  <main>
+    <div style="max-width: 800px; margin: 0 auto;">
+
+      <h2 class="info">Benvingut al teu buzón virtual</h2>
+
+      <div id="contenidorCartes">
+
+        <div class="carta">
+          <h3>De: Maria</h3>
+          <p>Hola, com estàs? T'escric des del passat.</p>
+        </div>
+
+      </div>
+
+    <marquee>¡Bienvenido al Cartero Invisible!</marquee>  
+
+      <section id="llistatCartes">
+      <!-- de moment buit: aquí aniran les cartes -->
+      </section>
+
+      <section id="formulariCarta">
+        <!-- de moment buit: aquí anirà el formulari -->
+      </section>
+
+      <button id="btnSaluda">Saluda'm!</button>
+
+    </div>
+
+  </main>
+ 
+  
+  <footer>
+    <p>&copy; 2026 El Cartero Invisible</p>
+  </footer>
+
 </body>
+
 </html>
