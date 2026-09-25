@@ -1,4 +1,6 @@
-projectoRaul
+# CARTERO INVISIBLE
+
+## SEMANA 1
 
 Full-stack project architecture overview.
 
@@ -40,3 +42,23 @@ Frontend
 cd frontend
 npm install                                     # Install npm dependencies
 npm start                                       # Start frontend dev server
+
+
+
+## SEMANA 2
+
+We have to do a endpoint for get a cart by id
+```
+@app.get("/cartas/{id}")
+def obtenir_carta(id: int):
+    # Dades simulades (més endavant es llegiran de fitxer)
+    cartes = [
+        {"id": 1, "remitent": "Maria", "contingut": "Hola, com estàs?"},
+        {"id": 2, "remitent": "Joan", "contingut": "T'escric des del passat."}
+    ]
+    for c in cartes:
+        if c["id"] == id:
+            return c
+    return {"error": "Carta no trobada"}, 404 
+```
+
