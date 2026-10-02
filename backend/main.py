@@ -13,7 +13,36 @@ class Carta(BaseModel):
 
 
 # Emmagatzematge en memòria
-cartes = []
+cartes = [
+    {
+        "id": 1,
+        "remitent": "Pau",
+        "destinatari": "Anna",
+        "contingut": "Hola Anna!",
+        "personatge": "Einstein"
+    },
+    {
+        "id": 2,
+        "remitent": "Anna",
+        "destinatari": "Pau",
+        "contingut": "Hola Pau!",
+        "personatge": "Newton"
+    },
+    {
+        "id": 3,
+        "remitent": "Marc",
+        "destinatari": "Laura",
+        "contingut": "Com estàs?",
+        "personatge": "Einstein"
+    },
+    {
+        "id": 4,
+        "remitent": "Laura",
+        "destinatari": "Marc",
+        "contingut": "Molt bé!",
+        "personatge": "Curie"
+    }
+]
 
 
 # Endpoint de la ruta arrel
@@ -23,17 +52,22 @@ def root():
 
 
 # GET /cartas
-# Retorna les cartes que hi ha en memòria
 @app.get("/cartas")
-def llistar_cartes(limit: int = 10, offset: int = 0):
-    return cartes[offset:offset + limit]
+def llistar_cartes(limit: int = 10, offset: int = 0, personatge: str = None):
+    if personatge:
+        cartesFiltrades = [
+            c for c in cartes
+            if c["personatge"] == personatge
+        ]
+    else:
+        cartesFiltrades = cartes
+
+    return cartesFiltrades[offset:offset + limit]
 
 
 # GET /cartas/{id}
-# Obté una carta concreta per ID
 @app.get("/cartas/{id}")
 def obtenir_carta(id: int):
-
     for carta in cartes:
         if carta["id"] == id:
             return carta
@@ -45,10 +79,8 @@ def obtenir_carta(id: int):
 
 
 # POST /cartas
-# Crea una carta nova
 @app.post("/cartas")
 def crear_carta(carta: Carta):
-
     nova_carta = carta.dict()
 
     nova_carta["id"] = len(cartes) + 1
