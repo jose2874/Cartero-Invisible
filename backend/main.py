@@ -57,7 +57,7 @@ def llistar_cartes(limit: int = 10, offset: int = 0, personatge: str = None):
     if personatge:
         cartesFiltrades = [
             c for c in cartes
-            if c["personatge"] == personatge
+            if c["remitent"] == personatge
         ]
     else:
         cartesFiltrades = cartes
