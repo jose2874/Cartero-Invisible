@@ -62,3 +62,9 @@ def obtenir_carta(id: int):
     return {"error": "Carta no trobada"}, 404 
 ```
 
+## SEMANA 3
+
+We have update and testing endpoints--> POST, GET and adding cartes in index.html with a button
+```bash
+      <button id="btnAfegir">Afegir carta</button>
+```
