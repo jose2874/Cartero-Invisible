@@ -88,6 +88,29 @@ button {
     z-index: 100;
 }
 
+#formCarta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#taulaCartes {
+  display: none;
+  position: relative;
+  z-index: 1;         /* la taula per sota del buzón */
+}
+
+.btn-eliminar{
+  display: block;
+  margin-top: 12px;
+  margin-left: auto;
+  color: #00ff0d;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border: 1px solid #ff0000;
+}
+
 footer {
   text-align: center;
   background-color: #fff;

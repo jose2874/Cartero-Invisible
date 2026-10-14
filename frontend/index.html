@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>El Cartero Invisible</title>
   <link rel="stylesheet" href="./style/style.css">
-  <script src="./js/script.js" defer></script>
 </head>
 
 <body>
@@ -18,17 +17,14 @@
   <main>
     <div style="max-width: 800px; margin: 0 auto;">
 
-      <h2 class="info">Benvingut al teu buzón virtual</h2>
-
+      <marquee>¡Bienvenido al Cartero Invisible!</marquee>
       <div id="contenidorCartes">
         <div class="carta">
           <h3>De: Maria</h3>
           <p>Hola, com estàs? T'escric des del passat.</p>
         </div>
 
-      </div>
-
-    <marquee>¡Bienvenido al Cartero Invisible!</marquee>  
+      </div> 
 
       <section id="llistatCartes">
       <!-- de moment buit: aquí aniran les cartes -->
@@ -45,13 +41,39 @@
     <div id="buzon">
       📭
     </div>
+
+    <!-- Setmana 4 -->
+    <form id="formCarta">
+      <input type="text" id="remitent" placeholder="El teu nom" required>
+      <input type="text" id="destinatari" placeholder="A qui va dirigida?" required>
+      <textarea id="contingut" placeholder="Escriu la teva carta..." required></textarea>
+      <input type="text" id="personatge" placeholder="A quin personatge escrius? (ex: Einstein)">
+      <button type="submit">Enviar carta</button>
+    </form>
+
+    <button id="btnMostrarCartes">Mostrar cartes</button>
+    <table id="taulaCartes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Remitent</th>
+          <th>Destinatari</th>
+          <th>Contingut</th>
+          <th>Accions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Les cartes s'afegiran aquí -->
+      </tbody>
+    </table>
+
   </main>
  
   
   <footer>
     <p>&copy; 2026 El Cartero Invisible</p>
   </footer>
-
+<script src="./js/script.js" type="module"></script>
 </body>
 
 </html>

@@ -1,84 +1,243 @@
+//////////////////////////
+// VARIABLES GLOBALS    //
+//////////////////////////
+
+let nom = "Pepe";
+let edat = 30;
+
+// Cartes simulades
+const cartesSimulades = [
+  { id: 1, remitent: "Maria", contingut: "Hola, com estàs? T'escric des del passat." },
+  { id: 2, remitent: "Joan", contingut: "Avui he vist un carter misteriós." },
+  { id: 3, remitent: "Laia", contingut: "Recorda que el temps és relatiu." }
+];
+
+
+//////////////////////////
+// FUNCIONS             //
+//////////////////////////
+
 function saluda() {
   alert("Hola, món!");
 }
 
-const boto = document.getElementById("btnSaluda");
-if (boto) {
-  boto.addEventListener("click", saluda);
-}
 
-const titol = document.querySelector("#titolPrincipal");
-if (titol) {
-  titol.textContent = "📮 El Cartero Invisible – Setmana 3";
-  titol.setAttribute("data-role", "banner");
-}
+export function renderitzarCartes(cartes) {
 
-const contenidor = document.querySelector("#contenidorCartes");
-if (contenidor) {
-  contenidor.innerHTML += "<p>Cartes pendents: 0</p>";
-}
+  const contenidor = document.querySelector("#contenidorCartes");
 
-const info = document.querySelector(".info");
-if (info) {
-  info.style.color = "#2c3e50";
-}
+  contenidor.innerHTML = "";   // 1. Buidem el taulell
 
-//Setmana 3
-const cartesSimulades = [
-    { id: 1, remitent: "Maria", contingut: "Hola, com estàs? T'escric des del passat." },
-    { id: 2, remitent: "Joan", contingut: "Avui he vist un carter misteriós." },
-    { id: 3, remitent: "Laia", contingut: "Recorda que el temps és relatiu." }
-]
 
-function renderitzarCartes(cartes) {
-    const contenidor = document.querySelector("#contenidorCartes");
-    contenidor.innerHTML = "";   // 1. Buidem el taulell
+  cartes.forEach(carta => {
 
-    cartes.forEach(carta => {
-         // 2. Fabriquem la carta
-        const divCarta = document.createElement("div");
-        divCarta.className = "carta";
+    // 2. Fabriquem la carta
+    const divCarta = document.createElement("div");
+    divCarta.className = "carta";
 
-        const titol = document.createElement("h3");
-        titol.textContent = `De: ${carta.remitent}`;
+    const titol = document.createElement("h3");
+    titol.textContent = `De: ${carta.remitent}`;
 
-        const paragraf = document.createElement("p");
-        paragraf.textContent = carta.contingut;
+    const paragraf = document.createElement("p");
+    paragraf.textContent = carta.contingut;
 
-        const idSpan = document.createElement("span");
-        idSpan.textContent = `#${carta.id}`;
-        idSpan.setAttribute("data-id", carta.id);
+    const idSpan = document.createElement("span");
+    idSpan.textContent = `#${carta.id}`;
+    idSpan.setAttribute("data-id", carta.id);
 
-         // 3. Muntem l'estructura
-        divCarta.appendChild(titol);
-        divCarta.appendChild(paragraf);
-        divCarta.appendChild(idSpan);
 
-        // 4. Pengem la carta al taulell
-        contenidor.appendChild(divCarta);
+    // BOTÓ ELIMINAR
+    const botoEliminar = document.createElement("button");
+    botoEliminar.textContent = "Eliminar";
+    botoEliminar.className = "btn-eliminar";
+    botoEliminar.setAttribute("data-id", carta.id);
 
-    });
 
-    // Crida-la en carregar la pàgina
-    document.addEventListener("DOMContentLoaded", () => {
-        renderitzarCartes(cartesSimulades);
-    });
+    // 3. Muntem l'estructura
+    divCarta.appendChild(titol);
+    divCarta.appendChild(paragraf);
+    divCarta.appendChild(idSpan);
+    divCarta.appendChild(botoEliminar);
 
-}
-
-//Boto per afegir al final de l'array una nova carta simulada i tornar a renderitzar el taulell
-const btnAfegir = document.querySelector("#btnAfegir");
-
-if (btnAfegir) {
-  btnAfegir.addEventListener("click", () => {
-    cartesSimulades.push({
-      id: cartesSimulades.length + 1,
-      remitent: "Carter " + (cartesSimulades.length + 1),
-      contingut: "Aquesta carta s'acaba de crear dinàmicament!"
-    });
-
-    renderitzarCartes(cartesSimulades);
+    // 4. Pengem la carta al taulell
+    contenidor.appendChild(divCarta);
   });
 }
 
-export { renderitzarCartes };
+
+function inicialitzar() {
+
+  // Botó Saluda
+  const boto = document.getElementById("btnSaluda");
+  if (boto) {
+    boto.addEventListener("click", saluda);
+  }
+
+
+  // Títol
+  const titol = document.querySelector("#titolPrincipal");
+
+  if (titol) {
+    titol.textContent = "📮 El Cartero Invisible – Setmana 3";
+    titol.setAttribute("data-role", "banner");
+  }
+
+
+  // Contenidor
+  const contenidor = document.querySelector("#contenidorCartes");
+
+  if (contenidor) {
+    contenidor.innerHTML += "<p>Cartes pendents: 0</p>";
+  }
+
+
+  // Info
+  const info = document.querySelector(".info");
+
+  if (info) {
+    info.style.color = "#2c3e50";
+  }
+
+
+  // Renderitzar les cartes
+  renderitzarCartes(cartesSimulades);
+
+
+  // Boto per afegir una carta
+  const btnAfegir = document.querySelector("#btnAfegir");
+
+  if (btnAfegir) {
+
+    btnAfegir.addEventListener("click", () => {
+
+      cartesSimulades.push({
+
+        id: cartesSimulades.length + 1,
+
+        remitent: "Carter " + (cartesSimulades.length + 1),
+
+        contingut: "Aquesta carta s'acaba de crear dinàmicament!"
+
+      });
+
+      renderitzarCartes(cartesSimulades);
+
+    });
+
+  }
+
+
+  // FORMULARI - SETMANA 4
+  const form = document.getElementById("formCarta");
+
+  if (form) {
+
+    form.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+
+      const remitent = document
+        .querySelector("#remitent")
+        .value
+        .trim();
+
+
+      if (remitent === "") {
+
+        alert("El camp remitent no pot estar buit!");
+
+        return;
+
+      }
+
+
+      const destinatari = document
+        .querySelector("#destinatari")
+        .value
+        .trim();
+
+
+      if (destinatari === "") {
+
+        alert("El camp destinatari no pot estar buit!");
+
+        return;
+
+      }
+
+
+      const contingut = document
+        .querySelector("#contingut")
+        .value
+        .trim();
+
+      if (contingut === "") {
+        alert("El camp contingut no pot estar buit!");
+        return;
+      }
+
+      cartesSimulades.push({
+        id: cartesSimulades.length + 1,
+        remitent: remitent,
+        contingut: contingut
+      });
+
+
+      renderitzarCartes(cartesSimulades);
+
+      form.reset();
+
+    });
+
+  }
+
+
+  // DELEGACIÓ D'ESDEVENIMENTS
+  // Un únic listener per a tots els botons eliminar
+
+  if (contenidor) {
+
+    contenidor.addEventListener("click", (event) => {
+
+      // Comprovem si hem clicat un botó eliminar
+      if (event.target.classList.contains("btn-eliminar")) {
+
+        // Agafem l'id de la carta
+        const id = Number(
+          event.target.getAttribute("data-id")
+        );
+
+        // Busquem la posició de la carta
+        const index = cartesSimulades.findIndex(
+          carta => carta.id === id
+        );
+
+        // Si existeix, l'eliminem
+        if (index !== -1) {
+
+          cartesSimulades.splice(index, 1);
+
+          // Tornem a renderitzar
+          renderitzarCartes(cartesSimulades);
+
+        }
+
+      }
+
+    });
+
+  }
+
+}
+
+//////////////////////////
+// CODI                 //
+//////////////////////////
+
+// Executa-ho només si estem al navegador
+// (evitant problemes a Node/Jest)
+
+if (typeof document !== 'undefined') {
+  document.addEventListener("DOMContentLoaded", inicialitzar);
+}
