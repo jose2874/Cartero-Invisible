@@ -1,5 +1,7 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
+import json
+import os
 
 app = FastAPI()
 
@@ -11,6 +13,8 @@ class Carta(BaseModel):
     contingut: str
     personatge: str
 
+# JSON file for storing cartas
+DATA_FILE = "cartas.json"
 
 # Emmagatzematge en memòria
 cartes = [
@@ -81,10 +85,38 @@ def obtenir_carta(id: int):
 # POST /cartas
 @app.post("/cartas")
 def crear_carta(carta: Carta):
-    nova_carta = carta.dict()
-
+    nova_carta = carta.model_dump()
     nova_carta["id"] = len(cartes) + 1
 
     cartes.append(nova_carta)
 
+    guardar_cartes(cartes)
+
     return nova_carta
+
+
+
+def cargar_cartes():
+    """Llegeix les cartes del fitxer. Si no existeix, torna una llista buida."""
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def guardar_cartes(cartes):
+    """Escriu les cartes al fitxer."""
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(cartes, f, indent=2, ensure_ascii=False)
+
+@app.delete("/cartas/{id}")
+def eliminar_carta(id: int):
+    global cartes
+    for c in cartes:
+        if c["id"] == id:
+            cartes.remove(c)
+            guardar_cartes(cartes)
+            return {"missatge": "Carta eliminada"}
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Carta no trobada"
+    )
