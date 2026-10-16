@@ -25,9 +25,10 @@ function saluda() {
 export function renderitzarCartes(cartes) {
 
   const contenidor = document.querySelector("#contenidorCartes");
+  const cosTaula = document.querySelector("#cosTaulaCartes");
 
   contenidor.innerHTML = "";   // 1. Buidem el taulell
-
+  cosTaula.innerHTML = "";     // 1. Buidem el cos de la taula
 
   cartes.forEach(carta => {
 
@@ -61,9 +62,61 @@ export function renderitzarCartes(cartes) {
 
     // 4. Pengem la carta al taulell
     contenidor.appendChild(divCarta);
+
+    // 5. Afegim la carta a la taula
+    const fila = document.createElement("tr");
+    const cel·laId = document.createElement("td"); 
+
+    cel·laId.textContent = carta.id;
+    const cel·laRemitent = document.createElement("td"); 
+    cel·laRemitent.textContent = carta.remitent; 
+
+    const cel·laDestinatari = document.createElement("td"); 
+    cel·laDestinatari.textContent = carta.destinatari || "Sense destinatari"; 
+    
+    const cel·laContingut = document.createElement("td"); 
+    cel·laContingut.className = "contingut-cell"; 
+    cel·laContingut.textContent = carta.contingut; 
+    
+    const cel·laAccions = document.createElement("td"); 
+    const botoEliminarTaula = document.createElement("button"); 
+
+    botoEliminarTaula.textContent = "Eliminar"; 
+    botoEliminarTaula.className = "btn-eliminar"; 
+    botoEliminarTaula.setAttribute("data-id", carta.id); 
+    botoEliminarTaula.type = "button"; 
+    cel·laAccions.appendChild(botoEliminarTaula); 
+
+
+    fila.appendChild(cel·laId); 
+    fila.appendChild(cel·laRemitent); 
+    fila.appendChild(cel·laDestinatari); 
+    fila.appendChild(cel·laContingut); 
+    fila.appendChild(cel·laAccions); 
+
+    cosTaula.appendChild(fila);
+
   });
 }
 
+function toggleTaula() { 
+  
+  const taula = document.getElementById("taulaCartes"); 
+  const boto = document.getElementById("btnMostrarCartes"); 
+  
+  if (!taula || !boto) { 
+    return; 
+  }
+  const estaOculta = getComputedStyle(taula).display === "none"; 
+  
+  if (estaOculta) { 
+      taula.style.display = "table"; boto.textContent = "Ocultar taula"; 
+    } 
+  
+  else { 
+    taula.style.display = "none"; boto.textContent = "Mostrar taula"; 
+  } 
+}
 
 function inicialitzar() {
 
@@ -85,6 +138,7 @@ function inicialitzar() {
 
   // Contenidor
   const contenidor = document.querySelector("#contenidorCartes");
+  const cosTaula = document.querySelector("#cosTaulaCartes");
 
   if (contenidor) {
     contenidor.innerHTML += "<p>Cartes pendents: 0</p>";
@@ -153,9 +207,7 @@ function inicialitzar() {
 
 
       const destinatari = document
-        .querySelector("#destinatari")
-        .value
-        .trim();
+        .querySelector("#destinatari").value.trim();
 
 
       if (destinatari === "") {
@@ -167,10 +219,7 @@ function inicialitzar() {
       }
 
 
-      const contingut = document
-        .querySelector("#contingut")
-        .value
-        .trim();
+      const contingut = document.querySelector("#contingut").value.trim();
 
       if (contingut === "") {
         alert("El camp contingut no pot estar buit!");
@@ -195,38 +244,35 @@ function inicialitzar() {
 
   // DELEGACIÓ D'ESDEVENIMENTS
   // Un únic listener per a tots els botons eliminar
+  
+  
+    function eliminarCarta(event) {
+       if (event.target.classList.contains("btn-eliminar")) { 
+        
+      // Agafem l'id de la carta 
+       const id = Number(event.target.getAttribute("data-id")); 
+       
+       // Busquem la posició de la carta 
+       const index = cartesSimulades.findIndex( carta => carta.id === id ); 
+       
+       // Si existeix, l'eliminem 
+       if (index !== -1) { 
+          cartesSimulades.splice(index, 1); 
+        
+      // Tornem a renderitzar les cartes i la taula 
+        renderitzarCartes(cartesSimulades); 
+      } 
+      } 
+    } // Botons eliminar de les cartes 
+      
+    if (contenidor) { contenidor.addEventListener("click", eliminarCarta); } // Botons eliminar de la taula 
+    if (cosTaula) { cosTaula.addEventListener("click", eliminarCarta); }
 
-  if (contenidor) {
 
-    contenidor.addEventListener("click", (event) => {
+  const btnMostrarCartes = document.getElementById("btnMostrarCartes"); 
 
-      // Comprovem si hem clicat un botó eliminar
-      if (event.target.classList.contains("btn-eliminar")) {
-
-        // Agafem l'id de la carta
-        const id = Number(
-          event.target.getAttribute("data-id")
-        );
-
-        // Busquem la posició de la carta
-        const index = cartesSimulades.findIndex(
-          carta => carta.id === id
-        );
-
-        // Si existeix, l'eliminem
-        if (index !== -1) {
-
-          cartesSimulades.splice(index, 1);
-
-          // Tornem a renderitzar
-          renderitzarCartes(cartesSimulades);
-
-        }
-
-      }
-
-    });
-
+  if (btnMostrarCartes) { 
+    btnMostrarCartes.addEventListener("click", toggleTaula); 
   }
 
 }

@@ -51,7 +51,7 @@
       <button type="submit">Enviar carta</button>
     </form>
 
-    <button id="btnMostrarCartes">Mostrar cartes</button>
+    <button id="btnMostrarCartes" onclick="toggleTaula()">Mostrar cartes</button>
     <table id="taulaCartes">
       <thead>
         <tr>
@@ -62,7 +62,7 @@
           <th>Accions</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="cosTaulaCartes">
         <!-- Les cartes s'afegiran aquí -->
       </tbody>
     </table>
