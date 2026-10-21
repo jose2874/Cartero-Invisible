@@ -18,23 +18,11 @@
     <div style="max-width: 800px; margin: 0 auto;">
 
       <marquee>¡Bienvenido al Cartero Invisible!</marquee>
-      <div id="contenidorCartes">
-        <div class="carta">
-          <h3>De: Maria</h3>
-          <p>Hola, com estàs? T'escric des del passat.</p>
-        </div>
+      
+      <!-- Contenidor on es dibuixaran les cartes -->
+      <div id="contenidorCartes"></div> 
 
-      </div> 
-
-      <section id="llistatCartes">
-      <!-- de moment buit: aquí aniran les cartes -->
-      </section>
-
-      <section id="formulariCarta">
-        <!-- de moment buit: aquí anirà el formulari -->
-      </section>
-      <button id="btnAfegir">Afegir carta</button>
-      <button id="btnSaluda">Saluda'm!</button>
+      <button id="btnSaluda" type="button">Saluda'm!</button>
 
     </div>
 
@@ -42,16 +30,19 @@
       📭
     </div>
 
-    <!-- Setmana 4 -->
+    <!-- Formulari per afegir noves cartes (Setmana 4 / M06) -->
     <form id="formCarta">
       <input type="text" id="remitent" placeholder="El teu nom" required>
       <input type="text" id="destinatari" placeholder="A qui va dirigida?" required>
+      <input type="text" id="personatge" placeholder="El teu personatge favorit" required>
       <textarea id="contingut" placeholder="Escriu la teva carta..." required></textarea>
-      <input type="text" id="personatge" placeholder="A quin personatge escrius? (ex: Einstein)">
-      <button type="submit">Enviar carta</button>
+      <!-- Canviat type="button" per type="submit" -->
+      <button type="submit" id="btnEnviar">Enviar carta</button>
     </form>
 
-    <button id="btnMostrarCartes" onclick="toggleTaula()">Mostrar cartes</button>
+    <!-- Botó sense onclick directament a l'HTML -->
+    <button type="button" id="btnMostrarCartes">Mostrar cartes</button>
+
     <table id="taulaCartes">
       <thead>
         <tr>
@@ -60,20 +51,21 @@
           <th>Destinatari</th>
           <th>Contingut</th>
           <th>Accions</th>
+          <th>Personatge</th>
         </tr>
       </thead>
       <tbody id="cosTaulaCartes">
-        <!-- Les cartes s'afegiran aquí -->
+        <!-- Les cartes s'afegiran aquí dinàmicament -->
       </tbody>
     </table>
 
   </main>
- 
-  
+
   <footer>
     <p>&copy; 2026 El Cartero Invisible</p>
   </footer>
-<script src="./js/script.js" type="module"></script>
+
+  <script src="./js/script.js" type="module"></script>
 </body>
 
 </html>

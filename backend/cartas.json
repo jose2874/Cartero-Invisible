@@ -7,20 +7,6 @@
     "personatge": "Einstein"
   },
   {
-    "id": 3,
-    "remitent": "Marc",
-    "destinatari": "Laura",
-    "contingut": "Com estàs?",
-    "personatge": "Einstein"
-  },
-  {
-    "id": 4,
-    "remitent": "Laura",
-    "destinatari": "Marc",
-    "contingut": "Molt bé!",
-    "personatge": "Curie"
-  },
-  {
     "remitent": "Pau",
     "destinatari": "Anna",
     "contingut": "Hola Anna!",
@@ -33,5 +19,61 @@
     "contingut": "Test",
     "personatge": "Test",
     "id": 6
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "id": 7
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "id": 8
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "id": 9
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "id": 10
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "id": 11
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "id": 12
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "id": 13
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "id": 14
   }
 ]

@@ -1,10 +1,32 @@
+/* Es declaren a :root (l'arrel del document) */
+:root {
+    --color-principal: #2c3e50;
+    --color-secundari: #e74c3c;
+    --color-fons: #f4f1ea;
+    --color-text: #333;
+    --color-carta: #ffffff;
+}
+
+/* S'usen amb var() */
+body {
+    
+    color: var(--color-text);
+}
+.carta {
+    background-color: var(--color-carta);
+}
+h1 {
+    color: var(--color-principal);
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   text-align: justify;
-  background-color: #f4f1ea;
+  background-color: var(--color-fons);  
+  color: var(--color-text);
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
   padding: 20px;
@@ -87,6 +109,25 @@ button {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     z-index: 1000;
 }
+
+/* Un sobre al capdamunt de cada carta */
+.carta::before {
+    content: "✉️";
+    font-size: 2rem;
+    display: block;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+/* Un segell al buzón */
+#buzon::after {
+    content: "📮";
+    font-size: 3rem;
+    position: absolute;
+    top: -20px;
+    right: -10px;
+}
+
 
 #formCarta {
   display: flex;
