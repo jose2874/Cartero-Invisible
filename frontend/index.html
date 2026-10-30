@@ -15,49 +15,75 @@
   </header>
 
   <main>
-    <div style="max-width: 800px; margin: 0 auto;">
+    <div class="main-container">
 
       <marquee>¡Bienvenido al Cartero Invisible!</marquee>
-      
-      <!-- Contenidor on es dibuixaran les cartes -->
-      <div id="contenidorCartes"></div> 
+    <!-- Formulari per afegir noves cartes (POST) -->
+    <section class="seccio-formulari">
+      <h2>Nova Carta</h2>
+      <form id="formCarta">
+        <input type="text" id="remitent" placeholder="El teu nom" required>
+        <input type="text" id="destinatari" placeholder="A qui va dirigida?" required>
+        <textarea id="contingut" placeholder="Escriu la teva carta..." required></textarea>
+        <input type="text" id="personatge" placeholder="A quin personatge escrius? (ex: Einstein)">
+        <button type="submit" id="btnEnviar" class="btn-principal">Enviar carta</button>
+      </form>
+    </section>
+      <!-- Contenidor de Targetes (Vista Taulell) -->
+      <div id="contenidorCartes" class="grid-cartes"></div> 
 
-      <button id="btnSaluda" type="button">Saluda'm!</button>
+      <div class="accions-globals">
+        <button id="btnSaluda" type="button" class="btn-secundari">Saluda'm!</button>
+        <button type="button" id="btnMostrarCartes" class="btn-principal">Mostrar cartes</button>
+      </div>
 
     </div>
 
-    <div id="buzon">
-      📭
+    <div id="buzon">📭</div>
+
+    <!-- Taula de Cartes -->
+    <div class="taula-responsive">
+      <table id="taulaCartes">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Remitent</th>
+            <th>Destinatari</th>
+            <th>Contingut</th>
+            <th>Accions</th>
+          </tr>
+        </thead>
+        <tbody id="cosTaulaCartes">
+          <!-- Es genera dinàmicament -->
+        </tbody>
+      </table>
     </div>
 
-    <!-- Formulari per afegir noves cartes (Setmana 4 / M06) -->
-    <form id="formCarta">
-      <input type="text" id="remitent" placeholder="El teu nom" required>
-      <input type="text" id="destinatari" placeholder="A qui va dirigida?" required>
-      <input type="text" id="personatge" placeholder="El teu personatge favorit" required>
-      <textarea id="contingut" placeholder="Escriu la teva carta..." required></textarea>
-      <!-- Canviat type="button" per type="submit" -->
-      <button type="submit" id="btnEnviar">Enviar carta</button>
-    </form>
+    <!-- Modal d'Edició (PUT) -->
+    <div id="modalEditar" class="modal">
+      <div class="modal-contingut">
+        <span id="btnTancarModal" class="tancar">&times;</span>
+        <h2>Editar Carta</h2>
+        <form id="formEditarCarta">
+          <!-- ID amagat per no mostrar-lo a l'usuari -->
+          <input type="hidden" id="edit-id">
 
-    <!-- Botó sense onclick directament a l'HTML -->
-    <button type="button" id="btnMostrarCartes">Mostrar cartes</button>
+          <label for="edit-remitent">Remitent:</label>
+          <input type="text" id="edit-remitent" required>
 
-    <table id="taulaCartes">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Remitent</th>
-          <th>Destinatari</th>
-          <th>Contingut</th>
-          <th>Accions</th>
-          <th>Personatge</th>
-        </tr>
-      </thead>
-      <tbody id="cosTaulaCartes">
-        <!-- Les cartes s'afegiran aquí dinàmicament -->
-      </tbody>
-    </table>
+          <label for="edit-destinatari">Destinatari:</label>
+          <input type="text" id="edit-destinatari" required>
+
+          <label for="edit-contingut">Contingut:</label>
+          <textarea id="edit-contingut" rows="4" required></textarea>
+
+          <label for="edit-personatge">Personatge:</label>
+          <input type="text" id="edit-personatge">
+
+          <button type="submit" class="btn-principal">Guardar Canvis</button>
+        </form>
+      </div>
+    </div>
 
   </main>
 

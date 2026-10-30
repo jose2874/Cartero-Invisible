@@ -1,38 +1,10 @@
 [
   {
-    "id": 1,
-    "remitent": "Pau",
-    "destinatari": "Anna",
-    "contingut": "Hola Anna!",
-    "personatge": "Einstein"
-  },
-  {
-    "remitent": "Pau",
-    "destinatari": "Anna",
-    "contingut": "Hola Anna!",
-    "personatge": "Einstein",
-    "id": 5
-  },
-  {
-    "remitent": "Test",
+    "id": 8,
+    "remitent": "Testings ahhhhhh",
     "destinatari": "Test",
     "contingut": "Test",
-    "personatge": "Test",
-    "id": 6
-  },
-  {
-    "remitent": "Pau",
-    "destinatari": "Anna",
-    "contingut": "Hola Anna!",
-    "personatge": "Einstein",
-    "id": 7
-  },
-  {
-    "remitent": "Test",
-    "destinatari": "Test",
-    "contingut": "Test",
-    "personatge": "Test",
-    "id": 8
+    "personatge": "Test"
   },
   {
     "remitent": "Pau",
@@ -68,12 +40,5 @@
     "contingut": "Hola Anna!",
     "personatge": "Einstein",
     "id": 13
-  },
-  {
-    "remitent": "Test",
-    "destinatari": "Test",
-    "contingut": "Test",
-    "personatge": "Test",
-    "id": 14
   }
 ]

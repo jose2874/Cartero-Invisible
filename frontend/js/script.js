@@ -1,19 +1,12 @@
 //////////////////////////
-// VARIABLES GLOBALS    //
-//////////////////////////
-
-let nom = "Pepe";
-let edat = 30;
-
-//////////////////////////
-// FUNCIONS             //
+// FUNCIONS PRINCIPALS  //
 //////////////////////////
 
 function saluda() {
   alert("Hola, món!");
 }
 
-// 1. Carregar cartes des del servidor (GET)
+// 1. Carregar cartes des del servidor (GET /cartas)
 export async function carregarCartes() {
   try {
     const response = await fetch('http://127.0.0.1:8000/cartas');
@@ -28,7 +21,7 @@ export async function carregarCartes() {
   }
 }
 
-// 2. Renderitzar les cartes a la interfície
+// 2. Renderitzar la interfície amb les cartes
 export function renderitzarCartes(cartes) {
   const contenidor = document.querySelector("#contenidorCartes");
   const cosTaula = document.querySelector("#cosTaulaCartes");
@@ -42,7 +35,7 @@ export function renderitzarCartes(cartes) {
   }
 
   cartes.forEach(carta => {
-    // --- Renderitzar Targetes ---
+    // --- Targetes (Vista Taulell) ---
     if (contenidor) {
       const divCarta = document.createElement("div");
       divCarta.className = "carta";
@@ -53,25 +46,35 @@ export function renderitzarCartes(cartes) {
       const paragraf = document.createElement("p");
       paragraf.textContent = carta.contingut;
 
-      const idSpan = document.createElement("span");
-      idSpan.textContent = `#${carta.id}`;
-      idSpan.setAttribute("data-id", carta.id);
+      // Contenidor per als botons
+      const divAccions = document.createElement("div");
+      divAccions.className = "accions-carta";
 
+      // BOTÓ EDITAR
+      const botoEditar = document.createElement("button");
+      botoEditar.type = "button";
+      botoEditar.textContent = "Editar";
+      botoEditar.className = "btn-editar";
+      botoEditar.setAttribute("data-id", carta.id);
+
+      // BOTÓ ELIMINAR
       const botoEliminar = document.createElement("button");
-      botoEliminar.type = "button"; // Evitem comportaments per defecte de formulari
+      botoEliminar.type = "button";
       botoEliminar.textContent = "Eliminar";
       botoEliminar.className = "btn-eliminar";
       botoEliminar.setAttribute("data-id", carta.id);
 
+      divAccions.appendChild(botoEditar);
+      divAccions.appendChild(botoEliminar);
+
       divCarta.appendChild(titol);
       divCarta.appendChild(paragraf);
-      divCarta.appendChild(idSpan);
-      divCarta.appendChild(botoEliminar);
+      divCarta.appendChild(divAccions);
 
       contenidor.appendChild(divCarta);
     }
 
-    // --- Renderitzar Taula ---
+    // --- Taula ---
     if (cosTaula) {
       const fila = document.createElement("tr");
 
@@ -89,12 +92,20 @@ export function renderitzarCartes(cartes) {
       cel·laContingut.textContent = carta.contingut;
 
       const cel·laAccions = document.createElement("td");
+      
+      const botoEditarTaula = document.createElement("button");
+      botoEditarTaula.type = "button";
+      botoEditarTaula.textContent = "Editar";
+      botoEditarTaula.className = "btn-editar";
+      botoEditarTaula.setAttribute("data-id", carta.id);
+
       const botoEliminarTaula = document.createElement("button");
       botoEliminarTaula.type = "button";
       botoEliminarTaula.textContent = "Eliminar";
       botoEliminarTaula.className = "btn-eliminar";
       botoEliminarTaula.setAttribute("data-id", carta.id);
 
+      cel·laAccions.appendChild(botoEditarTaula);
       cel·laAccions.appendChild(botoEliminarTaula);
 
       fila.appendChild(cel·laId);
@@ -108,18 +119,22 @@ export function renderitzarCartes(cartes) {
   });
 }
 
-// 3. Eliminar carta al servidor (DELETE)
-async function eliminarCartaServidor(id) {
+// 3. Eliminar carta al servidor (DELETE /cartas/{id})
+export async function eliminarCartaServidor(id) {
   try {
     const response = await fetch(`http://127.0.0.1:8000/cartas/${id}`, {
       method: 'DELETE'
     });
 
+    if (response.status === 404) {
+      alert("La carta ja no existeix al servidor.");
+      return;
+    }
+
     if (!response.ok) {
       throw new Error(`Error HTTP en eliminar: ${response.status}`);
     }
 
-    // Refresquem les cartes del servidor
     await carregarCartes();
   } catch (error) {
     console.error('Error eliminant la carta:', error);
@@ -127,7 +142,31 @@ async function eliminarCartaServidor(id) {
   }
 }
 
-// 4. Mostrar / Ocultar Taula
+// 4. Carregar dades d'una carta concreta i obrir el Modal d'Edició
+async function obrirModalEditar(id) {
+  try {
+    const response = await fetch(`http://127.0.0.1:8000/cartas/${id}`);
+    if (!response.ok) throw new Error("Error en carregar la carta");
+
+    const carta = await response.json();
+
+    // Assignem els valors al formulari del modal (l'ID s'amaga al camp hidden)
+    document.querySelector("#edit-id").value = carta.id;
+    document.querySelector("#edit-remitent").value = carta.remitent;
+    document.querySelector("#edit-destinatari").value = carta.destinatari || "";
+    document.querySelector("#edit-contingut").value = carta.contingut;
+    document.querySelector("#edit-personatge").value = carta.personatge || "";
+
+    // Mostrem el modal
+    const modal = document.querySelector("#modalEditar");
+    if (modal) modal.style.display = "block";
+  } catch (error) {
+    console.error(error);
+    alert("No s'han pogut carregar les dades de la carta per editar.");
+  }
+}
+
+// 5. Mostrar / Ocultar Taula
 function toggleTaula() {
   const taula = document.getElementById("taulaCartes");
   const boto = document.getElementById("btnMostrarCartes");
@@ -138,11 +177,28 @@ function toggleTaula() {
 
   if (estaOculta) {
     taula.style.display = "table";
-    boto.textContent = "Ocultar taula";
+    boto.textContent = "Ocultar cartes";
   } else {
     taula.style.display = "none";
-    boto.textContent = "Mostrar taula";
+    boto.textContent = "Mostrar cartes";
   }
+}
+
+// 6. Actualitzar carta al servidor (PUT /cartas/{id})
+export async function actualitzarCarta(id, dades) {
+  const response = await fetch(`http://127.0.0.1:8000/cartas/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dades)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error HTTP: ${response.status}`);
+  }
+
+  return response;
 }
 
 //////////////////////////
@@ -151,21 +207,17 @@ function toggleTaula() {
 
 function inicialitzar() {
   // Botó Saluda
-  const boto = document.getElementById("btnSaluda");
-  if (boto) boto.addEventListener("click", saluda);
+  const btnSaluda = document.getElementById("btnSaluda");
+  if (btnSaluda) btnSaluda.addEventListener("click", saluda);
 
-  // Títol
+  // Títol Principal
   const titol = document.querySelector("#titolPrincipal");
   if (titol) {
-    titol.textContent = "📮 El Cartero Invisible – Setmana 3";
+    titol.textContent = "📮 El Cartero Invisible";
     titol.setAttribute("data-role", "banner");
   }
 
-  // Info
-  const info = document.querySelector(".info");
-  if (info) info.style.color = "#2c3e50";
-
-  // FORMULARI - Enviar carta al servidor (POST)
+  // FORMULARI PRINCIPAL - Enviar nova carta (POST /cartas)
   const form = document.getElementById("formCarta");
   if (form) {
     form.addEventListener("submit", async (event) => {
@@ -177,7 +229,7 @@ function inicialitzar() {
       const personatge = document.querySelector("#personatge")?.value.trim() || "";
 
       if (!remitent || !destinatari || !contingut) {
-        alert("Tots els camps són obligatoris!");
+        alert("Tots els camps principals són obligatoris!");
         return;
       }
 
@@ -185,13 +237,18 @@ function inicialitzar() {
         const response = await fetch('http://127.0.0.1:8000/cartas', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ remitent: remitent, destinatari: destinatari, contingut: contingut, personatge: personatge })
+          body: JSON.stringify({
+            remitent: remitent,
+            destinatari: destinatari,
+            contingut: contingut,
+            personatge: personatge
+          })
         });
 
-        if (!response.ok) throw new Error('Error al guardar la carta');
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
         form.reset();
-        await carregarCartes(); // Refresquem la llista
+        await carregarCartes(); // Actualitzem la llista
       } catch (error) {
         console.error('Error enviant la carta:', error);
         alert("No s'ha pogut guardar la carta al servidor.");
@@ -199,26 +256,75 @@ function inicialitzar() {
     });
   }
 
-  // DELEGACIÓ D'ESDEVENIMENTS (Eliminar)
+  // FORMULARI MODAL - Guardar canvis d'edició (PUT /cartas/{id})
+  const formEditar = document.querySelector("#formEditarCarta");
+  if (formEditar) {
+    formEditar.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const id = document.querySelector("#edit-id")?.value;
+      const remitent = document.querySelector("#edit-remitent")?.value.trim();
+      const destinatari = document.querySelector("#edit-destinatari")?.value.trim();
+      const contingut = document.querySelector("#edit-contingut")?.value.trim();
+      const personatge = document.querySelector("#edit-personatge")?.value.trim() || "";
+
+      try {
+        await actualitzarCarta(id, {
+          remitent,
+          destinatari,
+          contingut,
+          personatge
+        });
+
+        // Ocultem el modal i refresquem les cartes
+        const modal = document.querySelector("#modalEditar");
+        if (modal) modal.style.display = "none";
+
+        await carregarCartes();
+      } catch (error) {
+        console.error('Error guardant canvis:', error);
+        alert("No s'han pogut desar els canvis de la carta.");
+      }
+    });
+  }
+
+  // DELEGACIÓ D'ESDEVENIMENTS (Editar i Eliminar)
+  const manejarClics = (event) => {
+    const id = event.target.getAttribute("data-id");
+    if (!id) return;
+
+    if (event.target.classList.contains("btn-editar")) {
+      obrirModalEditar(id);
+    } else if (event.target.classList.contains("btn-eliminar")) {
+      eliminarCartaServidor(id);
+    }
+  };
+
   const contenidor = document.querySelector("#contenidorCartes");
   const cosTaula = document.querySelector("#cosTaulaCartes");
 
-  function manejarEliminar(event) {
-    if (event.target.classList.contains("btn-eliminar")) {
-      const id = event.target.getAttribute("data-id");
-      if (id) {
-        eliminarCartaServidor(id);
-      }
-    }
+  if (contenidor) contenidor.addEventListener("click", manejarClics);
+  if (cosTaula) cosTaula.addEventListener("click", manejarClics);
+
+  // CONTROL DEL MODAL (Tancar amb X o clic fora)
+  const modal = document.querySelector("#modalEditar");
+  const btnTancarModal = document.querySelector("#btnTancarModal");
+
+  if (btnTancarModal) {
+    btnTancarModal.addEventListener("click", () => {
+      if (modal) modal.style.display = "none";
+    });
   }
 
-  if (contenidor) contenidor.addEventListener("click", manejarEliminar);
-  if (cosTaula) cosTaula.addEventListener("click", manejarEliminar);
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
 
   // Botó Mostrar / Ocultar Taula
   const btnMostrarCartes = document.getElementById("btnMostrarCartes");
   if (btnMostrarCartes) {
-    btnMostrarCartes.type = "button";
     btnMostrarCartes.addEventListener("click", toggleTaula);
   }
 }
@@ -230,6 +336,6 @@ function inicialitzar() {
 if (typeof document !== 'undefined') {
   document.addEventListener("DOMContentLoaded", () => {
     inicialitzar();
-    carregarCartes(); // Carrega les cartes inicials des de l'API
+    carregarCartes();
   });
 }
