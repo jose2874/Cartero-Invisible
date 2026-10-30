@@ -20,9 +20,9 @@ async def test_persistencia_post():
 @pytest.mark.asyncio
 async def test_delete_carta():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
-        response = await ac.delete("/cartas/2")
+        response = await ac.delete("/cartas/9")
         assert response.status_code == 200
 
     with open("cartas.json", "r") as f:
         dades = json.load(f)
-    assert not any(c["id"] == 2 for c in dades)
+    assert not any(c["id"] == 9 for c in dades)
