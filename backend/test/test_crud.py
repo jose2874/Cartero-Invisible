@@ -6,7 +6,7 @@ from httpx import ASGITransport, AsyncClient
 async def test_update_carta():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         payload = {"remitent": "Nou", "destinatari": "Nou", "contingut": "Nou", "personatge": "Nou"}
-        response = await ac.put("/cartas/1", json=payload)
+        response = await ac.put("/cartas/7", json=payload)
         assert response.status_code == 200
         assert response.json()["remitent"] == "Nou"
 

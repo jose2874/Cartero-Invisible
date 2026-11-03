@@ -25,6 +25,12 @@ body {
   margin: 0 auto;
 }
 
+header {
+  background-color: rgb(92, 4, 160);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 #titolPrincipal {
   text-align: center;
   color: #2c3e50;
@@ -180,6 +186,9 @@ button:active {
   background-color: var(--color-principal);
   color: #fff;
 }
+#taulaCartes td button {
+    margin: 0 6px;
+}
 
 .contingut-cell {
   max-width: 250px;
@@ -247,11 +256,105 @@ button:active {
   color: #000;
 }
 
+/* ================================= */
+/* M06 - TEMA FOSC                   */
+/* ================================= */
+
+body {
+transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Fons general */
+body.tema-fosc {
+  background-color: #1e1e2f;
+  color: #f1f1f1;
+}
+
+/* Títols */
+body.tema-fosc #titolPrincipal,
+body.tema-fosc h2,
+body.tema-fosc h3,
+body.tema-fosc p,
+body.tema-fosc label {
+  color: #f1f1f1;
+}
+
+/* Targetes */
+body.tema-fosc .carta {
+  background: #303047;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
+
+body.tema-fosc .carta h3 {
+  color: #ffffff;
+}
+
+/* Formularis */
+body.tema-fosc .seccio-formulari {
+  background: #303047;
+  color: #ffffff;
+}
+
+body.tema-fosc input,
+body.tema-fosc textarea,
+body.tema-fosc select {
+  background-color: #252538;
+  color: #ffffff;
+  border: 1px solid #666;
+}
+
+/* Taula */
+body.tema-fosc #taulaCartes {
+  background-color: #303047;
+  color: #ffffff;
+}
+
+body.tema-fosc #taulaCartes td {
+  border-color: #555;
+}
+
+/* Modal */
+body.tema-fosc .modal-contingut {
+  background-color: #303047;
+  color: #ffffff;
+}
+
+/* Peu de pàgina */
+body.tema-fosc footer {
+  background-color: #252538;
+  color: #ffffff;
+  border-top: 1px solid #555;
+}
+
+/* Botó canviar tema */
+#btnTema {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+#btnTema:hover {
+    background-color: #d35400;
+}
+
+
 /* Estils base (mòbil) */
 #contenidorCartes {
     display: grid;
-    grid-template-columns: 1fr;      /* una columna */
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
 /* Tauleta (a partir de 769px): dues columnes */

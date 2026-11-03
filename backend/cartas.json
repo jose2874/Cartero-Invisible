@@ -1,44 +1,58 @@
 [
   {
+    "id": 1,
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein"
+  },
+  {
+    "id": 7,
+    "remitent": "Nou",
+    "destinatari": "Nou",
+    "contingut": "Nou",
+    "personatge": "Nou"
+  },
+  {
     "id": 8,
-    "remitent": "Testings ahhhhhh",
+    "remitent": "Testingsahhhhhh",
     "destinatari": "Test",
     "contingut": "Test",
     "personatge": "Test"
   },
   {
-    "remitent": "Pau",
-    "destinatari": "Anna",
-    "contingut": "Hola Anna!",
-    "personatge": "Einstein",
-    "id": 9
-  },
-  {
     "remitent": "Test",
     "destinatari": "Test",
     "contingut": "Test",
     "personatge": "Test",
-    "id": 10
-  },
-  {
-    "remitent": "Pau",
-    "destinatari": "Anna",
-    "contingut": "Hola Anna!",
-    "personatge": "Einstein",
     "id": 11
   },
   {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "id": 12
+  },
+  {
     "remitent": "Test",
     "destinatari": "Test",
     "contingut": "Test",
     "personatge": "Test",
-    "id": 12
+    "id": 13
   },
   {
     "remitent": "Pau",
     "destinatari": "Anna",
     "contingut": "Hola Anna!",
     "personatge": "Einstein",
-    "id": 13
+    "id": 14
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "id": 15
   }
 ]

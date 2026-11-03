@@ -2,8 +2,13 @@ from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel
 from typing import Optional, List
 import json
-import os
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
+
+load_dotenv()   # carrega les variables del fitxer .env
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 app = FastAPI()
 
@@ -63,6 +68,12 @@ cartes = cargar_cartes()
 # ----------------------------------------------------
 # ENDPOINTS
 # ----------------------------------------------------
+@app.get("/config")
+def config():
+    return {
+        "debug": DEBUG,
+        "ia_configurada": GEMINI_API_KEY is not None and GEMINI_API_KEY != ""
+    }
 
 @app.get("/")
 def root():
