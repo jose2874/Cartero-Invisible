@@ -201,11 +201,71 @@ export async function actualitzarCarta(id, dades) {
   return response;
 }
 
+// 7. Aplicar tema guardat al carregar la pàgina
+export function aplicarTemaGuardat() {
+    if (localStorage.getItem("tema") === "fosc") {
+        document.body.classList.add("tema-fosc");
+    }
+}
+
+
+export function canviarTema() {
+    document.body.classList.toggle("tema-fosc");
+    const esFosc = document.body.classList.contains("tema-fosc");
+    localStorage.setItem("tema", esFosc ? "fosc" : "clar");
+}
+
+export function guardarUltimPersonatge(personatge) {
+    localStorage.setItem("ultimPersonatge", personatge);
+}
+
+
+export function preomplirUltimPersonatge() {
+    const ultim = localStorage.getItem("ultimPersonatge");
+    if (ultim) document.querySelector("#personatge").value = ultim;
+}
+
+
+export function guardarCartaEnProces(text) {
+    sessionStorage.setItem("cartaEnProces", text);
+}
+
+
+export function recuperarCartaEnProces() {
+    const text = sessionStorage.getItem("cartaEnProces");
+    if (text) document.querySelector("#contingut").value = text;
+}
+
 //////////////////////////
 // INICIALITZACIÓ       //
 //////////////////////////
 
 function inicialitzar() {
+
+  aplicarTemaGuardat();
+  preomplirUltimPersonatge();
+  recuperarCartaEnProces();
+
+  // dins d'inicialitzar():
+  document.querySelector("#btnTema").addEventListener("click", canviarTema);
+
+  // dins d'inicialitzar():
+  document.querySelector("#contingut").addEventListener("input", (e) => guardarCartaEnProces(e.target.value));
+
+  // Botó per canviar el tema
+  const btnTema = document.querySelector("#btnTema");
+  if (btnTema) {
+    btnTema.addEventListener("click", canviarTema);
+  }
+
+  // Guardar automàticament el contingut de la carta
+  const campContingut = document.querySelector("#contingut");
+  if (campContingut) {
+    campContingut.addEventListener("input", (e) => {
+      guardarCartaEnProces(e.target.value);
+    });
+  }
+
   // Botó Saluda
   const btnSaluda = document.getElementById("btnSaluda");
   if (btnSaluda) btnSaluda.addEventListener("click", saluda);
@@ -246,9 +306,16 @@ function inicialitzar() {
         });
 
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        
+        // Guardar l'últim personatge
+        guardarUltimPersonatge(personatge);
+
+        // Eliminar l'esborrany perquè la carta ja s'ha enviat
+        sessionStorage.removeItem("cartaEnProces");
 
         form.reset();
         await carregarCartes(); // Actualitzem la llista
+
       } catch (error) {
         console.error('Error enviant la carta:', error);
         alert("No s'ha pogut guardar la carta al servidor.");

@@ -8,6 +8,7 @@ global.fetch = jest.fn();
 
 beforeEach(() => {
     jest.clearAllMocks(); // Limpiamos las llamadas a fetch antes de cada test
+    global.alert = jest.fn();
 });
 
 
@@ -42,7 +43,8 @@ test('actualitzarCarta fa una petició PUT amb les capçaleres i cos correctes',
 test('eliminarCarta fa una petició DELETE a la URL correcta', async () => {
     global.fetch.mockResolvedValue({ 
         ok: true, 
-        status: 204 // 204 No Content es típico en DELETE
+        status: 204, // 204 No Content es típico en DELETE
+        json: async () => []
     });
 
 
