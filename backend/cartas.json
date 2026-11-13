@@ -7,13 +7,6 @@
     "personatge": "Einstein"
   },
   {
-    "id": 7,
-    "remitent": "Nou",
-    "destinatari": "Nou",
-    "contingut": "Nou",
-    "personatge": "Nou"
-  },
-  {
     "id": 8,
     "remitent": "Testingsahhhhhh",
     "destinatari": "Test",
@@ -54,5 +47,36 @@
     "contingut": "Test",
     "personatge": "Test",
     "id": 15
+  },
+  {
+    "remitent": "melqui",
+    "destinatari": "Vicrick",
+    "contingut": "haol afjasñkl",
+    "personatge": "Einstein",
+    "id": 16
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola Anna!",
+    "personatge": "Einstein",
+    "usuari_id": null,
+    "id": 17
+  },
+  {
+    "remitent": "Pau",
+    "destinatari": "Anna",
+    "contingut": "Hola",
+    "personatge": "Einstein",
+    "usuari_id": "user_test",
+    "id": 18
+  },
+  {
+    "remitent": "Test",
+    "destinatari": "Test",
+    "contingut": "Test",
+    "personatge": "Test",
+    "usuari_id": null,
+    "id": 19
   }
 ]

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request, Response
 from pydantic import BaseModel
 from typing import Optional, List
 import json
@@ -26,12 +26,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Model Pydantic per al cos del POST
+# Model Pydantic per al cos del POST / PUT
 class Carta(BaseModel):
     remitent: str
     destinatari: str
     contingut: str
     personatge: Optional[str] = ""
+    usuari_id: str | None = None      # opcional
 
 # Nom del fitxer de dades
 DATA_FILE = "cartas.json"
@@ -61,6 +62,13 @@ def guardar_cartes(cartes_llista: List[dict]):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(cartes_llista, f, indent=2, ensure_ascii=False)
 
+def nou_id() -> int:
+    """Genera un nou ID incremental basant-se en les cartes existents al fitxer JSON."""
+    actuals = cargar_cartes()
+    if not actuals:
+        return 1
+    return max(c["id"] for c in actuals) + 1
+
 # Carreguem les cartes de la memòria/fitxer en iniciar
 cartes = cargar_cartes()
 
@@ -83,7 +91,6 @@ def root():
 # GET /cartas
 @app.get("/cartas", status_code=status.HTTP_200_OK)
 def llistar_cartes(limit: int = 10, offset: int = 0, personatge: Optional[str] = None):
-    # Assegurem que llegim les dades més actualitzades
     global cartes
     cartes = cargar_cartes()
 
@@ -113,44 +120,77 @@ def obtenir_carta(id: int):
 
 # POST /cartas (Retorna status 201 Created)
 @app.post("/cartas", status_code=status.HTTP_201_CREATED)
-def crear_carta(carta: Carta):
+def crear_carta(carta: Carta, request: Request):
     global cartes
     cartes = cargar_cartes()
 
     nova_carta = carta.model_dump()
-    
-    # Generem un ID únic basat en el màxim ID existent per evitar duplicats
-    nou_id = max([c.get("id", 0) for c in cartes], default=0) + 1
-    nova_carta["id"] = nou_id
+    nova_carta["id"] = nou_id()
+    # La cookie té prioritat; si no arriba, ens quedem amb l'usuari_id que envia el client
+    nova_carta["usuari_id"] = request.cookies.get("usuari_id") or carta.usuari_id
 
     cartes.append(nova_carta)
     guardar_cartes(cartes)
-
     return nova_carta
+
 
 # PUT /cartas/{id}
 @app.put("/cartas/{id}")
 def actualitzar_carta(id: int, carta: Carta):
+    global cartes
+    cartes = cargar_cartes()
+
     for i, c in enumerate(cartes):
         if c["id"] == id:
-            # Actualitza totes les dades excepte l'ID
             cartes[i] = {
                 "id": id,
                 "remitent": carta.remitent,
                 "destinatari": carta.destinatari,
                 "contingut": carta.contingut,
-                "personatge": carta.personatge
+                "personatge": carta.personatge,
+                "usuari_id": carta.usuari_id or c.get("usuari_id")
             }
-            guardar_cartes(cartes)          # ⭐ persisteix al fitxer
+            guardar_cartes(cartes)
             return cartes[i]
+
     raise HTTPException(status_code=404, detail="Carta no trobada")
+
 
 # DELETE /cartas/{id}
 @app.delete("/cartas/{id}")
 def eliminar_carta(id: int):
+    global cartes
+    cartes = cargar_cartes()
+
     for c in cartes:
         if c["id"] == id:
             cartes.remove(c)
-            guardar_cartes(cartes)          # ⭐ persisteix al fitxer
+            guardar_cartes(cartes)
             return {"missatge": "Carta eliminada"}
+
     raise HTTPException(status_code=404, detail="Carta no trobada")
+
+
+@app.post("/login")
+def login_simulat(nom_usuari: str, response: Response):
+    response.set_cookie(key="usuari_id", value=nom_usuari, max_age=30*24*60*60, path="/")
+    return {"missatge": f"Benvingut, {nom_usuari}!"}
+
+
+@app.get("/perfil")
+def perfil(request: Request):
+    global cartes
+    cartes = cargar_cartes()
+
+    usuari = request.cookies.get("usuari_id")
+    if not usuari:
+        raise HTTPException(status_code=401, detail="No hi ha sessió activa")
+
+    cartes_usuari = [c for c in cartes if c.get("usuari_id") == usuari]
+    return {"usuari_id": usuari, "cartes": cartes_usuari}
+
+
+@app.delete("/logout")
+def logout(response: Response):
+    response.delete_cookie(key="usuari_id", path="/")
+    return {"missatge": "Sessió tancada"}

@@ -199,15 +199,22 @@ button:active {
 
 /* BUZÓN FIX */
 #buzon {
-  position: fixed;
-  bottom: 60px;
-  right: 20px;
-  background: #8B4513;
-  color: white;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  z-index: 100;
+    z-index: 100;
+    position: fixed;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "segell  segell  segell"     /* fila 1: el segell a tot l'ample */
+        ".       text    ."          /* fila 2: el text al mig (els punts = buit) */
+        "sobre   sobre   sobre";     /* fila 3: el sobre a tot l'ample */
+    gap: 10px;
+    background: #8B4513;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    bottom: 60px;
+    right: 20px;
 }
 
 #buzon::after {
@@ -216,6 +223,15 @@ button:active {
   position: absolute;
   top: -20px;
   right: -10px;
+}
+
+.segell { grid-area: segell; }
+.text   { grid-area: text; }
+.sobre  { grid-area: sobre; }
+
+.estat {
+    grid-column: 1 / 4;    /* de la línia 1 a la 4 → ocupa 3 columnes */
+    grid-row: 2;           /* fila 2 */
 }
 
 /* MODAL RESPONSIVE */

@@ -68,3 +68,18 @@ We have update and testing endpoints--> POST, GET and adding cartes in index.htm
 ```bash
       <button id="btnAfegir">Afegir carta</button>
 ```
+
+
+## SEMANA 4
+
+We adding the Week 4 succesully 
+
+## SEMANA 5
+
+## SEMANA 6
+
+## SEMANA 7
+
+## SEMANA 8
+
+Cookies VS localStorage adding Week 8 Successfully
