@@ -6,6 +6,59 @@ function saluda() {
   alert("Hola, món!");
 }
 
+// --- GESTIÓ DE COOKIES I USUARI ---
+
+export function getCookie(nom) {
+  const cookies = document.cookie.split("; ");
+  for (const c of cookies) {
+    const [clau, valor] = c.split("=");
+    if (clau === nom) return decodeURIComponent(valor);
+  }
+  return null;
+}
+
+export function setCookie(nom, valor, dies) {
+  const data = new Date();
+  data.setTime(data.getTime() + dies * 24 * 60 * 60 * 1000);
+  const expires = "expires=" + data.toUTCString();
+  document.cookie = `${nom}=${encodeURIComponent(valor)}; ${expires}; path=/`;
+}
+
+export function esborrarCookie(nom) {
+  document.cookie = `${nom}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
+}
+
+export function generarIdUsuari() {
+  return "user_" + Math.random().toString(36).substring(2, 10);
+}
+
+export function mostrarBenvinguda(usuariId) {
+  const el = document.querySelector("#benvinguda");
+  if (el) {
+    el.textContent = `Benvingut de nou, ${usuariId}!`;
+  }
+}
+
+export function inicialitzarUsuari() {
+  const existent = getCookie("usuari_id");
+  if (existent) {
+    mostrarBenvinguda(existent);
+    return existent;
+  }
+  const nou = generarIdUsuari();
+  setCookie("usuari_id", nou, 30);          // cookie de 30 dies
+  localStorage.setItem("usuariId", nou);    // còpia a localStorage
+  mostrarBenvinguda(nou);
+  return nou;
+}
+
+export function esborrarCarnet() {
+  esborrarCookie("usuari_id");
+  location.reload();
+}
+
+// --- GESTIÓ DE CARTES ---
+
 // 1. Carregar cartes des del servidor (GET /cartas)
 export async function carregarCartes() {
   try {
@@ -46,18 +99,15 @@ export function renderitzarCartes(cartes) {
       const paragraf = document.createElement("p");
       paragraf.textContent = carta.contingut;
 
-      // Contenidor per als botons
       const divAccions = document.createElement("div");
       divAccions.className = "accions-carta";
 
-      // BOTÓ EDITAR
       const botoEditar = document.createElement("button");
       botoEditar.type = "button";
       botoEditar.textContent = "Editar";
       botoEditar.className = "btn-editar";
       botoEditar.setAttribute("data-id", carta.id);
 
-      // BOTÓ ELIMINAR
       const botoEliminar = document.createElement("button");
       botoEliminar.type = "button";
       botoEliminar.textContent = "Eliminar";
@@ -150,14 +200,12 @@ async function obrirModalEditar(id) {
 
     const carta = await response.json();
 
-    // Assignem els valors al formulari del modal (l'ID s'amaga al camp hidden)
     document.querySelector("#edit-id").value = carta.id;
     document.querySelector("#edit-remitent").value = carta.remitent;
     document.querySelector("#edit-destinatari").value = carta.destinatari || "";
     document.querySelector("#edit-contingut").value = carta.contingut;
     document.querySelector("#edit-personatge").value = carta.personatge || "";
 
-    // Mostrem el modal
     const modal = document.querySelector("#modalEditar");
     if (modal) modal.style.display = "block";
   } catch (error) {
@@ -201,39 +249,35 @@ export async function actualitzarCarta(id, dades) {
   return response;
 }
 
-// 7. Aplicar tema guardat al carregar la pàgina
+// 7. Persistència de dades auxiliars
 export function aplicarTemaGuardat() {
-    if (localStorage.getItem("tema") === "fosc") {
-        document.body.classList.add("tema-fosc");
-    }
+  if (localStorage.getItem("tema") === "fosc") {
+    document.body.classList.add("tema-fosc");
+  }
 }
 
-
 export function canviarTema() {
-    document.body.classList.toggle("tema-fosc");
-    const esFosc = document.body.classList.contains("tema-fosc");
-    localStorage.setItem("tema", esFosc ? "fosc" : "clar");
+  document.body.classList.toggle("tema-fosc");
+  const esFosc = document.body.classList.contains("tema-fosc");
+  localStorage.setItem("tema", esFosc ? "fosc" : "clar");
 }
 
 export function guardarUltimPersonatge(personatge) {
-    localStorage.setItem("ultimPersonatge", personatge);
+  localStorage.setItem("ultimPersonatge", personatge);
 }
-
 
 export function preomplirUltimPersonatge() {
-    const ultim = localStorage.getItem("ultimPersonatge");
-    if (ultim) document.querySelector("#personatge").value = ultim;
+  const ultim = localStorage.getItem("ultimPersonatge");
+  if (ultim) document.querySelector("#personatge").value = ultim;
 }
-
 
 export function guardarCartaEnProces(text) {
-    sessionStorage.setItem("cartaEnProces", text);
+  sessionStorage.setItem("cartaEnProces", text);
 }
 
-
 export function recuperarCartaEnProces() {
-    const text = sessionStorage.getItem("cartaEnProces");
-    if (text) document.querySelector("#contingut").value = text;
+  const text = sessionStorage.getItem("cartaEnProces");
+  if (text) document.querySelector("#contingut").value = text;
 }
 
 //////////////////////////
@@ -241,16 +285,18 @@ export function recuperarCartaEnProces() {
 //////////////////////////
 
 function inicialitzar() {
-
   aplicarTemaGuardat();
   preomplirUltimPersonatge();
   recuperarCartaEnProces();
 
-  // dins d'inicialitzar():
-  document.querySelector("#btnTema").addEventListener("click", canviarTema);
+  // Inicialització de l'usuari mitjançant la cookie
+  inicialitzarUsuari();
 
-  // dins d'inicialitzar():
-  document.querySelector("#contingut").addEventListener("input", (e) => guardarCartaEnProces(e.target.value));
+  // Botó esborrar carnet
+  const btnEsborrar = document.querySelector("#btnEsborrarCarnet");
+  if (btnEsborrar) {
+    btnEsborrar.addEventListener("click", esborrarCarnet);
+  }
 
   // Botó per canviar el tema
   const btnTema = document.querySelector("#btnTema");
@@ -301,20 +347,18 @@ function inicialitzar() {
             remitent: remitent,
             destinatari: destinatari,
             contingut: contingut,
-            personatge: personatge
+            personatge: personatge,
+            usuari_id: getCookie("usuari_id") // S'envia l'ID d'usuari contingut a la cookie
           })
         });
 
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
         
-        // Guardar l'últim personatge
         guardarUltimPersonatge(personatge);
-
-        // Eliminar l'esborrany perquè la carta ja s'ha enviat
         sessionStorage.removeItem("cartaEnProces");
 
         form.reset();
-        await carregarCartes(); // Actualitzem la llista
+        await carregarCartes();
 
       } catch (error) {
         console.error('Error enviant la carta:', error);
@@ -343,7 +387,6 @@ function inicialitzar() {
           personatge
         });
 
-        // Ocultem el modal i refresquem les cartes
         const modal = document.querySelector("#modalEditar");
         if (modal) modal.style.display = "none";
 
